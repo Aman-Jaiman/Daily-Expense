@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Expense Tracker - Modern Financial Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background with overlay and blur -->
+    <div class="background-container">
+        <div class="background-image"></div>
+        <div class="background-overlay"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <span class="logo-icon">💳</span>
+                <span class="logo-text">ExpenseTracker</span>
+            </div>
+            <button id="navToggle" class="nav-toggle" aria-controls="navbarMenu" aria-expanded="false" title="Open menu">☰</button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><button type="button" class="nav-link nav-btn" id="copyLinkBtn" title="Copy website link to clipboard">
+                    <span class="link-icon">🔗</span> Copy Link
+                </button></li>
+                <li><button type="button" class="nav-link nav-btn" id="feedbackBtn" title="Send us your feedback">
+                    <span class="feedback-icon">💬</span> Feedback
+                </button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Main Grid -->
+            <div class="main-grid">
+                <!-- Left Card: Expense Tracker Form -->
+                <section class="left-section">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h1 class="card-title">Expense Tracker</h1>
+                            <p class="card-subtitle">Add and track your daily expenses</p>
+                        </div>
+
+                        <form id="expenseForm" class="expense-form">
+                            <!-- Amount and Currency Row -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="amount" class="form-label">Amount</label>
+                                    <input
+                                        type="number"
+                                        id="amount"
+                                        placeholder="0.00"
+                                        step="0.01"
+                                        min="0"
+                                        required
+                                        class="form-input"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="currency" class="form-label">Currency</label>
+                                    <select id="currency" class="form-input form-select">
+                                        <option value="USD">$ USD</option>
+                                        <option value="INR">₹ INR</option>
+                                        <option value="EUR">€ EUR</option>
+                                        <option value="GBP">£ GBP</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Category field with custom category option -->
+                            <div class="form-group">
+                                <label for="category" class="form-label">Category</label>
+                                <div class="category-input-group">
+                                    <select id="category" required class="form-input form-select">
+                                        <option value="">Select Category</option>
+                                        <option value="Food">🍔 Food</option>
+                                        <option value="Travel">✈️ Travel</option>
+                                        <option value="Shopping">🛍️ Shopping</option>
+                                        <option value="Utilities">⚡ Utilities</option>
+                                        <option value="Entertainment">🎬 Entertainment</option>
+                                        <option value="Other">📌 Other</option>
+                                    </select>
+                                    <button type="button" class="btn-add-category" id="toggleCustomCategory" title="Add custom category">
+                                        <span>+</span>
+                                    </button>
+                                </div>
+                                <!-- Custom category input (hidden by default) -->
+                                <div id="customCategoryInput" class="custom-category-form" style="display: none;">
+                                    <input 
+                                        type="text" 
+                                        id="newCategoryName" 
+                                        placeholder="Enter category name"
+                                        class="form-input"
+                                        maxlength="20"
+                                    >
+                                    <div class="category-form-buttons">
+                                        <button type="button" class="btn btn-add-category-confirm" id="addNewCategory">Add</button>
+                                        <button type="button" class="btn btn-cancel-category" id="cancelCategory">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Description field -->
+                            <div class="form-group">
+                                <label for="description" class="form-label">Description</label>
+                                <input
+                                    type="text"
+                                    id="description"
+                                    placeholder="What did you spend on?"
+                                    required
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <!-- Date field -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Date</label>
+                                <input
+                                    type="date"
+                                    id="date"
+                                    required
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-submit">
+                                <span class="btn-icon">+</span>
+                                Add Expense
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Right Section: Summary and Expenses -->
+                <section class="right-section">
+                    <!-- Total Expenses Card -->
+                    <div class="glass-card summary-card">
+                        <div class="summary-header">
+                            <h3 class="summary-title">Total Expenses</h3>
+                            <span class="summary-icon">💰</span>
+                        </div>
+                        <p class="summary-amount" id="totalAmount">$0.00</p>
+                        <p class="summary-subtitle">All currencies combined</p>
+                    </div>
+
+                    <!-- Category Breakdown Card -->
+                    <div class="glass-card category-breakdown-card">
+                        <h3 class="summary-title">Category Breakdown</h3>
+                        <div id="categoryTotals" class="category-breakdown">
+                            <p class="empty-category">No expenses yet</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Expenses Card -->
+                    <div class="glass-card expenses-card">
+                        <h3 class="summary-title">Recent Expenses</h3>
+                        <div id="expensesList" class="expenses-list">
+                            <div class="empty-state">
+                                <p>No expenses yet. Add one to get started! 🚀</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Daily Expense Tracker | Manage your finances wisely</p>
+    </footer>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="feedback-modal hidden">
+        <div class="feedback-overlay"></div>
+        <div class="feedback-card">
+            <div class="feedback-header">
+                <h2 class="feedback-title">Send Us Feedback 💬</h2>
+                <button type="button" class="feedback-close" id="closeFeedback" title="Close feedback form">✕</button>
+            </div>
+            
+            <form id="feedbackForm" class="feedback-form">
+                <!-- Name Field -->
+                <div class="feedback-group">
+                    <label for="feedbackName" class="feedback-label">Your Name</label>
+                    <input 
+                        type="text" 
+                        id="feedbackName" 
+                        placeholder="Enter your name"
+                        class="feedback-input"
+                        maxlength="50"
+                    >
+                </div>
+
+                <!-- Email Field -->
+                <div class="feedback-group">
+                    <label for="feedbackEmail" class="feedback-label">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="feedbackEmail" 
+                        placeholder="your.email@example.com"
+                        class="feedback-input"
+                        required
+                    >
+                </div>
+
+                <!-- Feedback Type -->
+                <div class="feedback-group">
+                    <label for="feedbackType" class="feedback-label">Feedback Type</label>
+                    <select id="feedbackType" class="feedback-input feedback-select" required>
+                        <option value="">Select a category</option>
+                        <option value="bug">🐛 Bug Report</option>
+                        <option value="feature">✨ Feature Request</option>
+                        <option value="improvement">🚀 Improvement</option>
+                        <option value="other">💡 Other</option>
+                    </select>
+                </div>
+
+                <!-- Message Field -->
+                <div class="feedback-group">
+                    <label for="feedbackMessage" class="feedback-label">Your Feedback</label>
+                    <textarea 
+                        id="feedbackMessage" 
+                        placeholder="Tell us what you think..."
+                        class="feedback-input feedback-textarea"
+                        rows="4"
+                        maxlength="500"
+                        required
+                    ></textarea>
+                    <div class="feedback-counter"><span id="charCount">0</span>/500</div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="feedback-buttons">
+                    <button type="submit" class="btn btn-feedback-submit">
+                        <span class="feedback-btn-icon">📤</span> Send Feedback
+                    </button>
+                    <button type="button" class="btn btn-feedback-cancel" id="cancelFeedback">
+                        <span class="feedback-btn-icon">✕</span> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+</html>
